@@ -1,5 +1,6 @@
 package com.n26.resource;
 
+import com.n26.common.Constants;
 import com.n26.entity.rest.Transaction;
 import com.n26.service.TransactionService;
 import com.n26.validation.TransactionValidator;
@@ -37,7 +38,7 @@ public class TransactionResource {
 
     @POST
     public Response createTransaction(Transaction transaction) {
-        if(!transactionValidator.validateTransaction(transaction)) {
+        if(!transactionValidator.validateTransaction(transaction, Constants.ONE_MINUTE)) {
             return Response.noContent().build();
         }
         Transaction createdTransaction = transactionService.createTransaction(transaction);

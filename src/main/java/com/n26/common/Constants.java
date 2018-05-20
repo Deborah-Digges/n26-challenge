@@ -9,6 +9,8 @@ public class Constants {
 
     public static final String TRANSACTIONS_BASE_URI = "/transactions";
 
+    public static final String STATISTICS_BASE_URI = "/statistics";
+
     public static final String PATH_SEPARATOR = "/";
 
     public static final int ONE_MINUTE = 60;
