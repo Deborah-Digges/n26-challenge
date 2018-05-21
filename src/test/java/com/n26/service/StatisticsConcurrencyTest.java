@@ -10,6 +10,7 @@ import com.google.testing.threadtester.ThreadedMain;
 import com.google.testing.threadtester.ThreadedSecondary;
 import com.n26.cache.StatisticsCache;
 import com.n26.cache.TransactionCache;
+import com.n26.common.Constants;
 import com.n26.common.TransactionTestUtils;
 import com.n26.entity.rest.Transaction;
 import com.n26.mapper.StatisticsMapper;
@@ -21,11 +22,12 @@ import com.n26.validation.TransactionValidator;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 /**
- * Verifies concurrent transaction creation
+ * Verifies that if two statistics threads are being run in parallel
+ * along with creation of transactions, the results are deterministic
  *
  * @author ddigges
  */
-public class TransactionCreationConcurrencyTest {
+public class StatisticsConcurrencyTest {
     private StatisticsService statisticsService = new StatisticsServiceImpl();
     private StatisticsCache statisticsCache = new StatisticsCache();
     private StatisticsMapper statisticsMapper = new StatisticsMapperImpl();
@@ -60,17 +62,27 @@ public class TransactionCreationConcurrencyTest {
         // Create a new transaction
         Transaction transaction = transactionTestUtils.createTransactionInWindow(200);
         transactionService.createTransaction(transaction);
+
+        statisticsService.processLastWindow(Constants.ONE_MINUTE);
     }
 
     @ThreadedSecondary
     public void secondary() {
         // Create a new transaction
-        Transaction transaction = transactionTestUtils.createTransactionInWindow(200);
+        Transaction transaction = transactionTestUtils.createTransactionInWindow(100);
         transactionService.createTransaction(transaction);
+
+        statisticsService.processLastWindow(Constants.ONE_MINUTE);
     }
 
     @ThreadedAfter
     public void after() {
-        assertThat(transactionCache.getUnprocessedTransactions()).isEqualTo(2);
+        assertThat(transactionCache.getUnprocessedTransactions()).isEqualTo(0);
+        assertThat(transactionCache.getTransactionsInWindow()).isEqualTo(2);
+        assertThat(statisticsCache.getAverage()).isEqualTo(150);
+        assertThat(statisticsCache.getCount()).isEqualTo(2);
+        assertThat(statisticsCache.getMax()).isEqualTo(200);
+        assertThat(statisticsCache.getMin()).isEqualTo(100);
+        assertThat(statisticsCache.getSum()).isEqualTo(300);
     }
 }
