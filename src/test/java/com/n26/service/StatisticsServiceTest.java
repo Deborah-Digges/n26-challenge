@@ -44,7 +44,6 @@ public class StatisticsServiceTest {
 
         // Setup dependencies for transactionService
         ReflectionTestUtils.setField(transactionService, "transactionCache", transactionCache);
-
     }
 
     /**
@@ -52,7 +51,7 @@ public class StatisticsServiceTest {
      * Verifies the statistics for the last window
      */
     @Test
-    public void test_Workflow() {
+    public void test_Workflow1() {
         // creates three transactions, one of which is more than one minute ago
         Transaction transaction1 = transactionTestUtils.createTransactionInWindow(200);
         Transaction transaction2 = transactionTestUtils.createTransactionOutsideWindow(150, Constants.ONE_MINUTE);
@@ -64,13 +63,46 @@ public class StatisticsServiceTest {
         // Manually trigger the process statistics flow
         statisticsService.processLastWindow(Constants.ONE_MINUTE);
 
-        assertThat(transactionCache.getUnprocessedTransactions().size()).isEqualTo(0);
-        assertThat(transactionCache.getTransactionsInWindow().size()).isEqualTo(2);
+        assertStatistics(2, 150, 200, 100);
+    }
 
-        Statistics statistics = statisticsService.getLatestStatistics();
-        assertThat(statistics.getCount()).isEqualTo(2);
-        assertThat(statistics.getAverage()).isEqualTo(150);
-        assertThat(statistics.getMax()).isEqualTo(200);
-        assertThat(statistics.getMin()).isEqualTo(100);
+
+    @Test
+    public void test_Workflow2() {
+        // creates three transactions, one of which is more than one minute ago
+        Transaction transaction1 = transactionTestUtils.createTransactionInWindow(200);
+        transactionService.createTransaction(transaction1);
+
+        Transaction transaction2 = transactionTestUtils.createTransactionOutsideWindow(150, Constants.ONE_MINUTE);
+        transactionService.createTransaction(transaction2);
+
+        Transaction transaction3 = transactionTestUtils.createTransactionInWindow(100);
+        transactionService.createTransaction(transaction3);
+
+        // Manually trigger the process statistics flow
+        statisticsService.processLastWindow(Constants.ONE_MINUTE);
+
+        assertStatistics(2, 150, 200, 100);
+
+        Transaction transaction4 = transactionTestUtils.createTransactionInWindow(50);
+        transactionService.createTransaction(transaction4);
+
+        // Manually trigger the process statistics flow
+        statisticsService.processLastWindow(Constants.ONE_MINUTE);
+
+        assertStatistics(3, 350.0 / 3, 200, 50);
+
+
+    }
+
+    private void assertStatistics(int count, double average, int max, int min) {
+        assertThat(transactionCache.getUnprocessedTransactions().size()).isEqualTo(0);
+        assertThat(transactionCache.getTransactionsInWindow().size()).isEqualTo(count);
+
+        Statistics statistics2 = statisticsService.getLatestStatistics();
+        assertThat(statistics2.getCount()).isEqualTo(count);
+        assertThat(statistics2.getAverage()).isEqualTo(average);
+        assertThat(statistics2.getMax()).isEqualTo(max);
+        assertThat(statistics2.getMin()).isEqualTo(min);
     }
 }
