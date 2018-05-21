@@ -63,6 +63,12 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
         <version>${jersey.version}</version>
         <scope>test</scope>
     </dependency>
+    <dependency>
+        <groupId>org.mapdb</groupId>
+        <artifactId>thread-weaver</artifactId>
+        <version>3.0.mapdb</version>
+        <scope>test</scope>
+    </dependency>
 
 </dependencies>
 
