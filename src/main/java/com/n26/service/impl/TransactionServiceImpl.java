@@ -37,6 +37,5 @@ public class TransactionServiceImpl implements TransactionService {
         transactionCache.getUnprocessedTransactions().add(transaction);
         LOG.info("[Ended] method=createTransaction");
         return transaction;
-
     }
 }

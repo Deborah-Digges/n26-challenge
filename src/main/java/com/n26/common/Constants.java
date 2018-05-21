@@ -14,4 +14,5 @@ public class Constants {
     public static final String PATH_SEPARATOR = "/";
 
     public static final int ONE_MINUTE = 60;
+    public static final int MILLI_SECONDS = 1000;
 }
