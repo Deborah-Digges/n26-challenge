@@ -26,8 +26,8 @@ public class TransactionValidator {
      * @return
      */
     public boolean validateTransaction(Transaction transaction, int window) {
-        Long currentTimestamp = System.currentTimeMillis()/1000;
-        if(currentTimestamp - transaction.getTimestamp() > window) {
+        Long currentTimestamp = System.currentTimeMillis();
+        if(currentTimestamp - transaction.getTimestamp() > window * Constants.MILLI_SECONDS) {
             return false;
         }
         return true;

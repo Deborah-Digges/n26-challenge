@@ -72,3 +72,24 @@ For the 2 lists `unprocessedTransactions` and `transactionsInWindow` a synchroni
 
 1. Unit tests are written in `JUnit`
 2. Concurrency tests are written using the `thread-weaver` dependency
+
+## Running the application
+
+1. `git clone https://github.com/Deborah-Digges/n26-challenge.git`
+2. `cd n26-challenge`
+3. `mvn clean install`
+4. `java -jar target/demo-1.0-SNAPSHOT.jar`
+5. To create a new transaction:
+```
+curl -X POST \
+     http://localhost:8080/transactions \
+     -H 'content-type: application/json' \
+     -d '{
+   	"amount": 100,
+   	"timestamp": 1526920754000
+   }'
+```
+6. To get the latest statistics:
+```
+curl -X GET http://localhost:8080/statistics
+```

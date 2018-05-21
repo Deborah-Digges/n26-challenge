@@ -15,7 +15,7 @@ public class TransactionTestUtils {
      * @return
      */
     public Transaction createTransactionOutsideWindow(double amount, int windowSeconds) {
-        return createTransaction(amount, System.currentTimeMillis()/Constants.MILLI_SECONDS - (windowSeconds + 1));
+        return createTransaction(amount, System.currentTimeMillis() - (windowSeconds * Constants.MILLI_SECONDS + 1));
     }
 
     /**
@@ -24,7 +24,7 @@ public class TransactionTestUtils {
      * @return
      */
     public Transaction createTransactionInWindow(double amount) {
-        return createTransaction(amount, System.currentTimeMillis()/Constants.MILLI_SECONDS);
+        return createTransaction(amount, System.currentTimeMillis());
     }
 
     /**
