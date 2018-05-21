@@ -14,6 +14,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <org.mapstruct.version>1.2.0.Final</org.mapstruct.version>
+    <jersey.test.framework.version>2.25.1</jersey.test.framework.version>
 </properties>
 
 <parent>
@@ -26,8 +27,13 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <!-- Compile -->
     <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-jersey</artifactId>
+        <groupId>org.mapstruct</groupId>
+        <artifactId>mapstruct-jdk8</artifactId> <!-- use mapstruct-jdk8 for Java 8 or higher -->
+        <version>${org.mapstruct.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-web</artifactId>
     </dependency>
     <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -35,9 +41,12 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
     </dependency>
     <dependency>
         <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-jersey</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-log4j2</artifactId>
     </dependency>
-    <!-- Provided -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-tomcat</artifactId>
@@ -48,18 +57,13 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
         <artifactId>spring-boot-starter-test</artifactId>
         <scope>test</scope>
     </dependency>
-
     <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-web</artifactId>
+        <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+        <artifactId>jersey-test-framework-provider-grizzly2</artifactId>
+        <version>${jersey.version}</version>
+        <scope>test</scope>
     </dependency>
 
-
-    <dependency>
-        <groupId>org.mapstruct</groupId>
-        <artifactId>mapstruct-jdk8</artifactId> <!-- use mapstruct-jdk8 for Java 8 or higher -->
-        <version>${org.mapstruct.version}</version>
-    </dependency>
 </dependencies>
 
 <build>
