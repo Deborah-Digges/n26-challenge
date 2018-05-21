@@ -8,6 +8,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.n26.cache.TransactionCache;
 import com.n26.common.Constants;
+import com.n26.common.TransactionTestUtils;
 import com.n26.entity.rest.Transaction;
 import com.n26.service.impl.TransactionServiceImpl;
 
@@ -20,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TransactionServiceTest {
     private TransactionService transactionService = new TransactionServiceImpl();
     private TransactionCache transactionCache = new TransactionCache();
+    private TransactionTestUtils transactionTestUtils = new TransactionTestUtils();
 
     @Before
     public void setup() {
@@ -28,9 +30,7 @@ public class TransactionServiceTest {
 
     @Test
     public void test_createTransaction() {
-        Transaction transaction = new Transaction();
-        transaction.setTimestamp(System.currentTimeMillis()/ Constants.MILLI_SECONDS);
-        transaction.setAmount(1000);
+        Transaction transaction = transactionTestUtils.createTransactionInWindow(100);
 
         Transaction createdTransaction = transactionService.createTransaction(transaction);
 
