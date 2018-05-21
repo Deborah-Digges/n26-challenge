@@ -13,6 +13,9 @@ import com.n26.service.impl.TransactionServiceImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * @author ddigges
+ */
 @RunWith(SpringRunner.class)
 public class TransactionServiceTest {
     private TransactionService transactionService = new TransactionServiceImpl();
